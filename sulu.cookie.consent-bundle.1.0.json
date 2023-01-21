@@ -1,0 +1,37 @@
+{
+  "manifests": {
+    "creatiom/sulu-cookie-consent-bundle": {
+      "manifest": {
+        "bundles": {
+          "Creatiom\\Bundle\\SuluCookieConsentBundle": [
+            "all"
+          ]
+        },
+        "copy-from-recipe": {
+          "config/": "%CONFIG_DIR%"
+        }
+      },
+      "files": {
+        "config/packages/cookie_consent.yaml": {
+          "contents": [
+            "cookie_consent:",
+            "    theme: 'light' # light, dark",
+            "    categories: # Below are the default supported categories",
+            "        - 'analytics'",
+            "        - 'tracking'",
+            "        - 'marketing'",
+            "        - 'social_media'",
+            "    use_logger: true # Logs user actions to database",
+            "     position: 'top' # top, bottom",
+            "    simplified: false # When set to true the user can only deny or accept all cookies at once",
+            "    http_only: true # Sets HttpOnly on cookies",
+            "    form_action: $routeName # When set, xhr-Requests will only be sent to this route. Take care of having the route available.",
+            "    csrf_protection: true # The cookie consent form is csrf protected or not"
+          ],
+          "executable": false
+        }
+      },
+      "ref": "018a9542b31e339b338c610f8c2ce7fa2849cfff"
+    }
+  }
+}

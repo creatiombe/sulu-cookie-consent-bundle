@@ -1,0 +1,42 @@
+{% form_theme form '@SuluCookieConsent/form/cookie_consent_theme.html.twig' %}
+
+{% block script %}
+    <script type="text/javascript" src="{{ asset('bundles/sulucookieconsent/js/cookie_consent.js') }}"></script>
+{% endblock %}
+
+<div class="cookie-consent cookie-consent--{{ theme }}-theme cookie-consent--{{ position }} {% if simplified %}cookie-consent--simplified{% endif %}">
+    {% block title %}
+        <h3 class="cookie-consent__title">{{ 'cookie_consent.title'|trans({}, 'CookieConsentBundle') }}</h3>
+    {% endblock %}
+
+    {% block intro %}
+        <p class="cookie-consent__intro">{{ 'cookie_consent.intro'|trans({}, 'CookieConsentBundle') }}</p>
+    {% endblock %}
+
+    {% block read_more %}
+        <a class="cookie-consent__read-more" href="{% block read_more_link %}/privacy-statement{% endblock %}">{{ 'cookie_consent.read_more'|trans({}, 'CookieConsentBundle') }}</a>
+    {% endblock %}
+
+    {{ form_start(form, {'attr': {'class': 'cookie-consent__form'}}) }}
+        <div class="cookie-consent__category-group">
+            {% for child in form %}
+                {% if child.vars.block_prefixes[0] != 'button' %}
+                    {{ form_row(child) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="cookie-consent__btn-group">
+            {{ form_rest(form) }}
+            {% if simplified %}
+                {% block toggle_details %}
+                    <div class="cookie-consent__toggle-details">
+                        <span class="cookie-consent__toggle-details-show">{{ 'cookie_consent.show_details'|trans({}, 'CookieConsentBundle') }}</span>
+                        <span class="cookie-consent__toggle-details-hide">{{ 'cookie_consent.hide_details'|trans({}, 'CookieConsentBundle') }}</span>
+                    </div>
+                {% endblock %}
+            {% endif %}
+        </div>
+    {{ form_end(form) }}
+</div>
+

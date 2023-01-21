@@ -1,0 +1,31 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $cookieConsentTheme: '%cookie_consent.theme%'
+            $cookieCategories: '%cookie_consent.categories%'
+            $useLogger: '%cookie_consent.use_logger%'
+            $cookieConsentPosition: '%cookie_consent.position%'
+            $cookieConsentSimplified: '%cookie_consent.simplified%'
+            $httpOnly: '%cookie_consent.http_only%'
+            $formAction: '%cookie_consent.form_action%'
+            $csrfProtection: '%cookie_consent.csrf_protection%'
+
+    Creatiom\Bundle\SuluCookieConsentBundle\:
+        resource: '../../'
+        exclude: '../../{vendor}'
+
+    Creatiom\Bundle\SuluCookieConsentBundle\Controller\:
+        resource: '../../Controller/*'
+        public: true
+
+    Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker:
+        arguments: ["@=service('request_stack').getCurrentRequest()"]
+
+    Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger:
+        arguments:
+            $request: "@=service('request_stack').getCurrentRequest()"
