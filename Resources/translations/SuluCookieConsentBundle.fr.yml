@@ -2,6 +2,7 @@ cookie_consent:
     title: 'Les cookies sur notre site.'
     intro: ''
     read_more: 'En savoir plus'
+    google_analytics: 'Nous utilisons des cookies sur ce site Web pour suivre les visiteurs via Google Analytics.'
     analytics:
         title: 'Acceptez-vous les cookies analytiques ?'
         description: ''

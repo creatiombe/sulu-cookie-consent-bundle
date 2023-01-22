@@ -1,6 +1,7 @@
 cookie_consent:
     title: 'Cookies on our website.'
     intro: ''
+    google_analytics: 'We use cookies on this website to track visitors through Google Analytics.'
     read_more: 'read more about this'
     analytics:
         title: 'Do you want analytical cookies?'

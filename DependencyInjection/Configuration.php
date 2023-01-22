@@ -20,14 +20,12 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('cookie_consent');
-
         if (method_exists($treeBuilder, 'getRootNode')) {
             $rootNode = $treeBuilder->getRootNode();
         } else {
             // BC layer for symfony/config 4.1 and older
             $rootNode = /* @scrutinizer ignore-deprecated */ $treeBuilder->root('cookie_consent');
         }
-
         $rootNode
             ->children()
                 ->variableNode('categories')
@@ -37,9 +35,16 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(ThemeEnum::THEME_LIGHT)
                     ->values(ThemeEnum::getAvailableThemes())
                 ->end()
-                ->enumNode('position')
-                    ->defaultValue(PositionEnum::POSITION_TOP)
-                    ->values(PositionEnum::getAvailablePositions())
+                ->arrayNode('position')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('vertical')
+                            ->defaultValue(PositionEnum::POSITION_BOTTOM)
+                        ->end()
+                        ->scalarNode('horizontal')
+                             ->defaultValue(PositionEnum::POSITION_LEFT)
+                        ->end()
+                    ->end()
                 ->end()
                 ->booleanNode('use_logger')
                     ->defaultTrue()

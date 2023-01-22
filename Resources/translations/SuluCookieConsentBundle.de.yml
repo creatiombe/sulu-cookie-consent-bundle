@@ -2,6 +2,7 @@ cookie_consent:
     title: 'Používame súbory cookies'
     intro: ''
     read_more: 'Ďalšie informácie'
+    google_analytics: 'Wir geben Cookies auf dieser Website zum Bezoekers te tracken via Google Analytics.'
     analytics:
         title: 'Povoliť štatistické cookies?'
         description: ''

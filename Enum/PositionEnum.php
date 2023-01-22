@@ -13,11 +13,20 @@ class PositionEnum
 {
     const POSITION_TOP     = 'top';
     const POSITION_BOTTOM  = 'bottom';
+    const POSITION_LEFT    = 'left';
+    const POSITION_RIGHT   = 'right';
 
     /**
      * @var array
      */
-    private static $positions = [
+    private static $horizontalPositions = [
+        self::POSITION_LEFT,
+        self::POSITION_RIGHT,
+    ];
+    /**
+     * @var array
+     */
+    private static $verticalPositions = [
         self::POSITION_TOP,
         self::POSITION_BOTTOM,
     ];
@@ -25,8 +34,16 @@ class PositionEnum
     /**
      * Get all cookie consent positions.
      */
-    public static function getAvailablePositions(): array
+    public static function getAvailableHorizontalPositions(): array
     {
-        return self::$positions;
+        return self::$horizontalPositions;
+    }
+
+    /**
+     * Get all cookie consent positions.
+     */
+    public static function getAvailableVerticalPositions(): array
+    {
+        return self::$verticalPositions;
     }
 }
