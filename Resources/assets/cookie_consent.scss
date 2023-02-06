@@ -55,10 +55,10 @@
   }
   &__btn {
     &_main {
-      @apply bg-lime-600 text-white rounded p-4 text-lg shadow-md border border-lime-700 hover:bg-lime-700;
+      @apply bg-lime-600 text-base text-white rounded p-4 text-lg shadow-md border border-lime-700 hover:bg-lime-700;
     }
     &_necessary {
-      @apply bg-rose-600 text-white rounded p-1 shadow-md border border-red-700 hover:bg-red-700;
+      @apply bg-rose-600 text-sm text-white rounded p-1 shadow-md border border-red-700 hover:bg-red-700;
     }
   }
 
