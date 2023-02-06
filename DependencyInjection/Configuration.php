@@ -24,12 +24,15 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->getRootNode();
         } else {
             // BC layer for symfony/config 4.1 and older
-            $rootNode = /* @scrutinizer ignore-deprecated */ $treeBuilder->root('cookie_consent');
+            $rootNode = /* @scrutinizer ignore-deprecated */ $treeBuilder->root('sulu_cookie_consent');
         }
         $rootNode
             ->children()
                 ->variableNode('categories')
                     ->defaultValue([CategoryEnum::CATEGORY_TRACKING, CategoryEnum::CATEGORY_MARKETING, CategoryEnum::CATEGORY_SOCIAL_MEDIA])
+                ->end()
+                ->variableNode('privacy_link')
+                    ->defaultValue('/privacy')
                 ->end()
                 ->enumNode('theme')
                     ->defaultValue(ThemeEnum::THEME_LIGHT)

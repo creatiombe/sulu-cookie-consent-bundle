@@ -19,38 +19,23 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CookieConsentType extends AbstractType
+class CookieCategoriesType extends AbstractType
 {
-    /**
-     * @var CookieChecker
-     */
-    protected $cookieChecker;
+
+    private CookieChecker $cookieChecker;
+
+    private array $cookieCategories;
 
     /**
-     * @var array
+     * @param CookieChecker $cookieChecker
+     * @param array $cookieCategories
      */
-    protected $cookieCategories;
-
-    /**
-     * @var bool
-     */
-    protected $cookieConsentSimplified;
-
-    /**
-     * @var bool
-     */
-    protected $csrfProtection;
-
     public function __construct(
         CookieChecker $cookieChecker,
         array $cookieCategories,
-        bool $cookieConsentSimplified = false,
-        bool $csrfProtection = true
     ) {
         $this->cookieChecker           = $cookieChecker;
         $this->cookieCategories        = $cookieCategories;
-        $this->cookieConsentSimplified = $cookieConsentSimplified;
-        $this->csrfProtection          = $csrfProtection;
     }
 
     /**
@@ -58,12 +43,25 @@ class CookieConsentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
-        if ($this->cookieConsentSimplified === false) {
-            $builder->add('categories', CookieCategoriesType::class, ['label' => false]);
+        foreach($this->cookieCategories as $category) {
+            $builder->add($category, CheckboxType::class, [
+                'label' => 'cookie_consent.category.' . $category,
+                'translation_domain' => false,
+                'required' => false,
+                'data' => $this->cookieChecker->hasCategoryCookieSet($category),
+            ]);
         }
-        $builder->add('accept', SubmitType::class, ['label' => 'cookie_consent.accept', 'attr' => ['class' => 'cookie-consent__btn cookie-consent__btn_main']]);
-        $builder->add('only_necessary', SubmitType::class, ['label' => 'cookie_consent.only_necessary', 'attr' => ['data-role' => 'only_necessary', 'class' => 'cookie-consent__btn cookie-consent__btn_necessary']]);
+//        $builder->add('categories', ChoiceType::class, [
+//            'choices' => $options['categories'],
+//            'multiple' => true,
+//            'expanded' => true,
+//            'label' => 'cookie_consent.categories',
+//            'choice_label' => function ($choiceValue, $key, $value) {
+//                return 'cookie_consent.category.' . $key;
+//            },
+//            'choice_translation_domain' => false,
+//        ]);
+
     }
 
     /**
@@ -72,8 +70,7 @@ class CookieConsentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_domain' => 'SuluCookieConsentBundle',
-            'csrf_protection' => $this->csrfProtection,
+            'translation_domain' => 'SuluCookieConsentBundle'
         ]);
     }
 }

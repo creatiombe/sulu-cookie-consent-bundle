@@ -84,10 +84,15 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
     /**
      * Handle form submit.
      */
-    protected function handleFormSubmit(array $categories, Request $request, Response $response): void
+    protected function handleFormSubmit(array $data, Request $request, Response $response): void
     {
+
+        if(array_key_exists('categories', $data) === false) {
+            return;
+        }
         $cookieConsentKey = $this->getCookieConsentKey($request);
 
+        $categories = $data['categories'];
         $this->cookieHandler->save($categories, $cookieConsentKey, $response);
 
         if ($this->useLogger) {
@@ -100,7 +105,7 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
      */
     protected function getCookieConsentKey(Request $request): string
     {
-        return $request->cookies->get(CookieNameEnum::COOKIE_CONSENT_KEY_NAME) ?? uniqid();
+        return $request->cookies->get(CookieNameEnum::COOKIE_CONSENT_KEY_NAME) ?? uniqid('', true);
     }
 
     /**

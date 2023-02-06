@@ -50,6 +50,11 @@ class CookieConsentController
     /**
      * @var string
      */
+    private $privacyLink;
+
+    /**
+     * @var array
+     */
     private $cookieConsentPosition;
 
     /**
@@ -73,7 +78,8 @@ class CookieConsentController
         CookieChecker $cookieChecker,
         RouterInterface $router,
         string $cookieConsentTheme,
-        string $cookieConsentPosition,
+        string $privacyLink,
+        array $cookieConsentPosition,
         TranslatorInterface $translator,
         bool $cookieConsentSimplified = false,
         string $formAction = null
@@ -83,6 +89,7 @@ class CookieConsentController
         $this->cookieChecker           = $cookieChecker;
         $this->router                  = $router;
         $this->cookieConsentTheme      = $cookieConsentTheme;
+        $this->privacyLink             = $privacyLink;
         $this->cookieConsentPosition   = $cookieConsentPosition;
         $this->translator              = $translator;
         $this->cookieConsentSimplified = $cookieConsentSimplified;
@@ -92,18 +99,18 @@ class CookieConsentController
     /**
      * Show cookie consent.
      *
-     * @Route("/cookie_consent", name="cookie_consent.show")
+     * @Route("/cookie_consent", name="sulu_cookie_consent.show")
      */
     public function show(Request $request): Response
     {
         $this->setLocale($request);
-
         $response = new Response(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
-                'form'       => $this->createCookieConsentForm()->createView(),
-                'theme'      => $this->cookieConsentTheme,
-                'position'   => $this->cookieConsentPosition,
-                'simplified' => $this->cookieConsentSimplified,
+                'form'          => $this->createCookieConsentForm()->createView(),
+                'privacy_link'  => $this->privacyLink,
+                'theme'         => $this->cookieConsentTheme,
+                'position'      => $this->cookieConsentPosition,
+                'simplified'    => $this->cookieConsentSimplified,
             ])
         );
 
@@ -117,7 +124,7 @@ class CookieConsentController
     /**
      * Show cookie consent.
      *
-     * @Route("/cookie_consent_alt", name="cookie_consent.show_if_cookie_consent_not_set")
+     * @Route("/cookie_consent_alt", name="sulu_cookie_consent.show_if_cookie_consent_not_set")
      */
     public function showIfCookieConsentNotSet(Request $request): Response
     {

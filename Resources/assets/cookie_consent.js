@@ -1,3 +1,5 @@
+import './cookie_consent.scss';
+
 document.addEventListener("DOMContentLoaded", function() {
     var cookieConsent = document.querySelector('.cookie-consent');
     var cookieConsentForm = document.querySelector('.cookie-consent__form');
@@ -5,36 +7,27 @@ document.addEventListener("DOMContentLoaded", function() {
     var cookieConsentCategoryDetails = document.querySelector('.cookie-consent__category-group');
     var cookieConsentCategoryDetailsToggle = document.querySelector('.cookie-consent__toggle-details');
 
-    // If cookie consent is direct child of body, assume it should be placed on top of the site pushing down the rest of the website
-    if (cookieConsent && cookieConsent.parentNode.nodeName === 'BODY') {
-        if (cookieConsent.classList.contains('cookie-consent--top')) {
-            document.body.style.marginTop = cookieConsent.offsetHeight + 'px';
-
-            cookieConsent.style.position = 'absolute';
-            cookieConsent.style.top = '0';
-            cookieConsent.style.left = '0';
-        } else {
-            document.body.style.marginBottom = cookieConsent.offsetHeight + 'px';
-
-            cookieConsent.style.position = 'fixed';
-            cookieConsent.style.bottom = '0';
-            cookieConsent.style.left = '0';
-        }
-    }
-
-    if (cookieConsentForm) {
+    if (cookieConsentFormBtn.length > 0 && cookieConsentForm) {
         // Submit form via ajax
         for (var i = 0; i < cookieConsentFormBtn.length; i++) {
             var btn = cookieConsentFormBtn[i];
             btn.addEventListener('click', function (event) {
                 event.preventDefault();
-
                 var formAction = cookieConsentForm.action ? cookieConsentForm.action : location.href;
                 var xhr = new XMLHttpRequest();
+                if(event.target.getAttribute('id') === 'cookie_consent_only_necessary') {
 
+                    var checkboxes = cookieConsentForm.querySelectorAll('input[type="checkbox"]');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].checked = false;
+                    }
+                }
                 xhr.onload = function () {
                     if (xhr.status >= 200 && xhr.status < 300) {
-                        cookieConsent.style.display = 'none';
+                        cookieConsent.classList.add('cookie-consent__hide');
+                        setTimeout(function () {
+                            cookieConsent.classList.add('cookie-consent__hidden');
+                        }, 300);
                         var buttonEvent = new CustomEvent('cookie-consent-form-submit-successful', {
                             detail: event.target
                         });
@@ -44,22 +37,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 xhr.open('POST', formAction);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.send(serializeForm(cookieConsentForm, event.target));
-
-                // Clear all styles from body to prevent the white margin at the end of the page
-                document.body.style.marginBottom = null;
-                document.body.style.marginTop  = null;
             }, false);
         }
     }
 
-    if (cookieConsentCategoryDetails && cookieConsentCategoryDetailsToggle) {
-        cookieConsentCategoryDetailsToggle.addEventListener('click', function() {
-            var detailsIsHidden = cookieConsentCategoryDetails.style.display !== 'block';
-            cookieConsentCategoryDetails.style.display = detailsIsHidden ? 'block' : 'none';
-            cookieConsentCategoryDetailsToggle.querySelector('.cookie-consent__toggle-details-hide').style.display = detailsIsHidden ? 'block' : 'none';
-            cookieConsentCategoryDetailsToggle.querySelector('.cookie-consent__toggle-details-show').style.display = detailsIsHidden ? 'none' : 'block';
-        });
-    }
 });
 
 function serializeForm(form, clickedButton) {

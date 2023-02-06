@@ -40,4 +40,16 @@ class CookieChecker
     {
         return $this->request->cookies->get(CookieNameEnum::getCookieCategoryName($category)) === 'true';
     }
+
+
+    /**
+     * Check if given cookie category is permitted by user.
+     */
+    public function hasCategoryCookieSet(string $category): bool
+    {
+        if(!$this->request->cookies->get(CookieNameEnum::getCookieCategoryName($category))) {
+            return true;
+        }
+        return $this->isCategoryAllowedByUser($category);
+    }
 }

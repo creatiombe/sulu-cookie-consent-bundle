@@ -34,14 +34,14 @@ public function registerBundles()
 When not using symfony flex, enable the bundles routing manually:
 ```yaml
 # app/config/routing.yml
-cookie_consent:
+sulu_cookie_consent:
     resource: "@SuluCookieConsentBundle/Resources/config/routing.yaml"
 ```
 
 ### Step 4: Configure to your needs
 Configure your Cookie Consent with the following possible settings
 ```yaml
-cookie_consent:
+sulu_cookie_consent:
     theme: 'light' # light, dark
     categories: # Below are the default supported categories
         - 'analytics'
@@ -60,14 +60,14 @@ cookie_consent:
 ### Twig implementation
 Load the cookie consent in Twig via render_esi ( to prevent caching ) at any place you like:
 ```twig
-{{ render_esi(path('cookie_consent.show')) }}
-{{ render_esi(path('cookie_consent.show_if_cookie_consent_not_set')) }}
+{{ render_esi(path('sulu_cookie_consent.show')) }}
+{{ render_esi(path('sulu_cookie_consent.show_if_cookie_consent_not_set')) }}
 ```
 
 If you want to load the cookie consent with a specific locale you can pass the locale as a parameter:
 ```twig
-{{ render_esi(path('cookie_consent.show', { 'locale' : 'en' })) }}
-{{ render_esi(path('cookie_consent.show_if_cookie_consent_not_set', { 'locale' : app.request.locale })) }}
+{{ render_esi(path('sulu_cookie_consent.show', { 'locale' : 'en' })) }}
+{{ render_esi(path('sulu_cookie_consent.show_if_cookie_consent_not_set', { 'locale' : app.request.locale })) }}
 ```
 
 ### Cookies
@@ -122,7 +122,7 @@ bin/console assets:install
 
 And include the styling in your template:
 ```twig
-{% include "@CookieConsent/cookie_consent_styling.html.twig" %}
+{% include "@SuluCookieConsent/cookie_consent_styling.html.twig" %}
 ```
 
 ### Javascript
@@ -142,7 +142,7 @@ You can override the templates by placing templates inside your project (except 
 
 ```twig
 # app/Resources/CookieConsentBundle/views/cookie_consent.html.twig
-{% extends '@!CookieConsent/cookie_consent.html.twig' %}
+{% extends '@!SuluCookieConsent/cookie_consent.html.twig' %}
 
 {% block title %}
     Your custom title
@@ -153,7 +153,7 @@ You can override the templates by placing templates inside your project (except 
 You can override the templates by placing templaces inside you project as below. Be careful, it is important to place templates at this location: "app/templates/bundles/CookieConsentBundle/" . 
 ```twig
 # app/templates/bundles/CookieConsentBundle/cookie_consent.html.twig
-{% extends '@!CookieConsent/cookie_consent.html.twig' %}
+{% extends '@!SuluCookieConsent/cookie_consent.html.twig' %}
 
 {% block intro %}
     Your custom intro

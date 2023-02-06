@@ -11,11 +11,11 @@ namespace Creatiom\Bundle\SuluCookieConsentBundle\Enum;
 
 class CookieNameEnum
 {
-    const COOKIE_CONSENT_NAME = 'Cookie_Consent';
+    const COOKIE_CONSENT_NAME = 'cookie_consent';
 
-    const COOKIE_CONSENT_KEY_NAME = 'Cookie_Consent_Key';
+    const COOKIE_CONSENT_KEY_NAME = 'cookie_consent_key';
 
-    const COOKIE_CATEGORY_NAME_PREFIX = 'Cookie_Category_';
+    const COOKIE_CATEGORY_NAME_PREFIX = 'cookie_consent_category_';
 
     /**
      * Get cookie category name.
