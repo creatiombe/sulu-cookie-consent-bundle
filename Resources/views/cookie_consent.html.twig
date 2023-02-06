@@ -157,7 +157,7 @@
         <div class="block prose">
             <p>{{ 'cookie_consent.intro'|trans({}, 'SuluCookieConsentBundle') }}</p>
             <p>{{ 'cookie_consent.continue_agreement'|trans({}, 'SuluCookieConsentBundle') }}</p>
-            <p><a class="hover:underline" href="{{ privacy_link }}">{{ 'cookie_consent.read_more'|trans({}, 'SuluCookieConsentBundle') }}</a></p>
+            <p><a class="text-xs hover:underline" href="{{ privacy_link }}">{{ 'cookie_consent.read_more_about_our_privacy'|trans({}, 'SuluCookieConsentBundle') }}</a></p>
         </div>
         {% else %}
         <div class="block prose">
@@ -172,7 +172,7 @@
                     </div>
                 </div>
             </details>
-            <p><a class="text-xs hover:underline" href="{{ privacy_link }}">{{ 'cookie_consent.read_more'|trans({}, 'SuluCookieConsentBundle') }}</a></p>
+            <p><a class="text-xs hover:underline" href="{{ privacy_link }}">{{ 'cookie_consent.read_more_about_our_privacy'|trans({}, 'SuluCookieConsentBundle') }}</a></p>
         </div>
         {% endif %}
     </div>
