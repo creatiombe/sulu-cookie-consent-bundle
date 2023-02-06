@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }, 300);
                 xhr.onload = function () {
                     if (xhr.status >= 200 && xhr.status < 300) {
-                        var buttonEvent = new CustomEvent('cookie-consent-form-submit-successful', {
+                        var buttonEvent = new CustomEvent('cookie-consent-submitted', {
                             detail: event.target
                         });
                         document.dispatchEvent(buttonEvent);
