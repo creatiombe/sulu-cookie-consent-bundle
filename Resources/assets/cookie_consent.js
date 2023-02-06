@@ -22,12 +22,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         checkboxes[i].checked = false;
                     }
                 }
+                cookieConsent.classList.add('cookie-consent__hide');
+                setTimeout(function () {
+                    cookieConsent.classList.add('cookie-consent__hidden');
+                }, 300);
                 xhr.onload = function () {
                     if (xhr.status >= 200 && xhr.status < 300) {
-                        cookieConsent.classList.add('cookie-consent__hide');
-                        setTimeout(function () {
-                            cookieConsent.classList.add('cookie-consent__hidden');
-                        }, 300);
                         var buttonEvent = new CustomEvent('cookie-consent-form-submit-successful', {
                             detail: event.target
                         });
