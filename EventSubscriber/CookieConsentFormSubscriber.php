@@ -93,7 +93,7 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
                 $this->handleFormSubmit($form->getData(), $request, $response);
 
                 //Force start session
-                $request->hasSession();
+                $request->getSession()->start();
 
                 $response->send();
             }
