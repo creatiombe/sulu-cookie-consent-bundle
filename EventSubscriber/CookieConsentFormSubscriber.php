@@ -61,7 +61,7 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-           KernelEvents::RESPONSE => ['onResponse'],
+           KernelEvents::RESPONSE => ['onResponse', -10],
         ];
     }
 
@@ -78,14 +78,9 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
 
         $response = $event->getResponse();
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            $response->setVary('Cookie');
-        }
-
-        $form = $this->createCookieConsentForm();
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
+            $form = $this->createCookieConsentForm();
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
                 /* Deactivate Cache for this token action */
                 $response->setSharedMaxAge(0);
                 $response->setMaxAge(0);
@@ -94,8 +89,10 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
                 $response->headers->addCacheControlDirective('no-cache', true);
                 $response->headers->addCacheControlDirective('must-revalidate', true);
                 $response->headers->addCacheControlDirective('no-store', true);
+                $response->setContent(json_encode(['success' => true]));
+                $this->handleFormSubmit($form->getData(), $request, $response);
+                $response->send();
             }
-            $this->handleFormSubmit($form->getData(), $request, $response);
         }
     }
 

@@ -36,21 +36,14 @@ class CookieConsentType extends AbstractType
      */
     protected $cookieConsentSimplified;
 
-    /**
-     * @var bool
-     */
-    protected $csrfProtection;
-
     public function __construct(
         CookieChecker $cookieChecker,
         array $cookieCategories,
-        bool $cookieConsentSimplified = false,
-        bool $csrfProtection = true
+        bool $cookieConsentSimplified = false
     ) {
         $this->cookieChecker           = $cookieChecker;
         $this->cookieCategories        = $cookieCategories;
         $this->cookieConsentSimplified = $cookieConsentSimplified;
-        $this->csrfProtection          = $csrfProtection;
     }
 
     /**
@@ -73,7 +66,7 @@ class CookieConsentType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'SuluCookieConsentBundle',
-            'csrf_protection' => $this->csrfProtection,
+            'csrf_protection' => false,
         ]);
     }
 }
