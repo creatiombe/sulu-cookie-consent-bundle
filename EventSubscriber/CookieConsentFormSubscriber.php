@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber;
 
+use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
 use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class CookieConsentFormSubscriber implements EventSubscriberInterface
@@ -45,13 +47,15 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
      * @var bool
      */
     private $useLogger;
+    private CookieChecker $cookieChecker;
 
-    public function __construct(FormFactoryInterface $formFactory, CookieLogger $cookieLogger, CookieHandler $cookieHandler, bool $useLogger)
+    public function __construct(FormFactoryInterface $formFactory, CookieLogger $cookieLogger, CookieHandler $cookieHandler, CookieChecker $cookieChecker, bool $useLogger)
     {
         $this->formFactory   = $formFactory;
         $this->cookieLogger  = $cookieLogger;
         $this->cookieHandler = $cookieHandler;
         $this->useLogger     = $useLogger;
+        $this->cookieChecker = $cookieChecker;
     }
 
     public static function getSubscribedEvents(): array
@@ -71,7 +75,11 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
         }
 
         $request  = $event->getRequest();
+
         $response = $event->getResponse();
+        if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
+            $response->setVary('Cookie', true);
+        }
 
         $form = $this->createCookieConsentForm();
         $form->handleRequest($request);
