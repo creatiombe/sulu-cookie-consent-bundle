@@ -61,7 +61,7 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-           KernelEvents::RESPONSE => ['onResponse', -10],
+           KernelEvents::RESPONSE => ['onResponse', 10],
         ];
     }
 
@@ -91,6 +91,10 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
                 $response->headers->addCacheControlDirective('no-store', true);
                 $response->setContent(json_encode(['success' => true]));
                 $this->handleFormSubmit($form->getData(), $request, $response);
+
+                //Force start session
+                $request->hasSession();
+
                 $response->send();
             }
         }
