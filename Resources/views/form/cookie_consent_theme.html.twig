@@ -1,5 +1,10 @@
 {% extends '@SuluBlock/form/tailwind_2_layout.html.twig' %}
 
+{%- block csrf_token_widget -%}
+    {{ block('hidden_widget') }}
+    {% do prepare_component('csrf-token', { id: id, formName: form.parent.vars.name }) %}
+{% endblock %}
+
 {%- block checkbox_row -%}
     {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('mb-6')) }) -%}
     {%- set widget_attr = {} -%}
