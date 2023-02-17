@@ -49,12 +49,14 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
     private $useLogger;
     private CookieChecker $cookieChecker;
 
+    private bool $cookieConsentSaved = false;
+
     public function __construct(FormFactoryInterface $formFactory, CookieLogger $cookieLogger, CookieHandler $cookieHandler, CookieChecker $cookieChecker, bool $useLogger)
     {
-        $this->formFactory   = $formFactory;
-        $this->cookieLogger  = $cookieLogger;
+        $this->formFactory = $formFactory;
+        $this->cookieLogger = $cookieLogger;
         $this->cookieHandler = $cookieHandler;
-        $this->useLogger     = $useLogger;
+        $this->useLogger = $useLogger;
         $this->cookieChecker = $cookieChecker;
     }
 
@@ -70,11 +72,11 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
      */
     public function onResponse(KernelEvent $event): void
     {
-        if ($event instanceof FilterResponseEvent === false && $event instanceof ResponseEvent === false) {
+        if (false === $event instanceof FilterResponseEvent && false === $event instanceof ResponseEvent) {
             throw new \RuntimeException('No ResponseEvent class found');
         }
 
-        $request  = $event->getRequest();
+        $request = $event->getRequest();
 
         $response = $event->getResponse();
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
@@ -92,10 +94,13 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
                 $response->setContent(json_encode(['success' => true]));
                 $this->handleFormSubmit($form->getData(), $request, $response);
 
-                //Force start session
+                // Force start session
                 $request->getSession()->start();
 
                 $response->send();
+            }
+            if ($this->cookieChecker->isCookieConsentSavedByUser() || $this->cookieConsentSaved) {
+                $request->getSession()->start();
             }
         }
     }
@@ -105,15 +110,14 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
      */
     protected function handleFormSubmit(array $data, Request $request, Response $response): void
     {
-
-        if(array_key_exists('categories', $data) === false) {
+        if (false === array_key_exists('categories', $data)) {
             return;
         }
         $cookieConsentKey = $this->getCookieConsentKey($request);
 
         $categories = $data['categories'];
         $this->cookieHandler->save($categories, $cookieConsentKey, $response);
-
+        $this->cookieConsentSaved = true;
         if ($this->useLogger) {
             $this->cookieLogger->log($categories, $cookieConsentKey);
         }

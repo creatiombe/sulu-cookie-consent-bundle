@@ -1,4 +1,4 @@
-{% extends 'tailwind_2_layout.html.twig' %}
+{% extends '@SuluBlock/form/tailwind_2_layout.html.twig' %}
 
 {%- block checkbox_row -%}
     {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('mb-6')) }) -%}

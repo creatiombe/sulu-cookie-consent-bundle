@@ -1,6 +1,7 @@
 parameters:
 
 services:
+    Sulu\Twig\Extensions\ComponentExtension: ~
     _defaults:
         autowire: true
         autoconfigure: true

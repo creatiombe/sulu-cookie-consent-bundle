@@ -66,7 +66,7 @@ class CookieConsentType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'SuluCookieConsentBundle',
-            'csrf_protection' => false,
+            'csrf_protection' => true,
         ]);
     }
 }
