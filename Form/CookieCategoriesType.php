@@ -70,7 +70,8 @@ class CookieCategoriesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'translation_domain' => 'SuluCookieConsentBundle'
+            'translation_domain' => 'SuluCookieConsentBundle',
+            'csrf_protection' => false
         ]);
     }
 }

@@ -94,14 +94,11 @@ class CookieConsentFormSubscriber implements EventSubscriberInterface
                 $response->setContent(json_encode(['success' => true]));
                 $this->handleFormSubmit($form->getData(), $request, $response);
 
-                // Force start session
-                $request->getSession()->start();
-
                 $response->send();
             }
-            if ($this->cookieChecker->isCookieConsentSavedByUser() || $this->cookieConsentSaved) {
-                $request->getSession()->start();
-            }
+        }
+        if ($this->cookieChecker->isCookieConsentSavedByUser() || $this->cookieConsentSaved) {
+            $request->getSession()->start();
         }
     }
 
