@@ -10,11 +10,16 @@ declare(strict_types=1);
 namespace Creatiom\Bundle\SuluCookieConsentBundle\Controller;
 
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
+use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
+use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
+use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
 use Creatiom\Bundle\SuluCookieConsentBundle\Form\CookieConsentType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -68,9 +73,19 @@ class CookieConsentController
     private $cookieConsentSimplified;
 
     /**
-     * @var string|null
+     * @var CookieLogger
      */
-    private $formAction;
+    private $cookieLogger;
+
+    /**
+     * @var CookieHandler
+     */
+    private $cookieHandler;
+
+    /**
+     * @var bool
+     */
+    private $useLogger;
 
     public function __construct(
         Environment $twigEnvironment,
@@ -82,28 +97,33 @@ class CookieConsentController
         array $cookieConsentPosition,
         TranslatorInterface $translator,
         bool $cookieConsentSimplified = false,
-        string $formAction = null
+        CookieLogger $cookieLogger,
+        CookieHandler $cookieHandler,
+        bool $useLogger = false
     ) {
-        $this->twigEnvironment         = $twigEnvironment;
-        $this->formFactory             = $formFactory;
-        $this->cookieChecker           = $cookieChecker;
-        $this->router                  = $router;
-        $this->cookieConsentTheme      = $cookieConsentTheme;
-        $this->privacyLink             = $privacyLink;
-        $this->cookieConsentPosition   = $cookieConsentPosition;
-        $this->translator              = $translator;
-        $this->cookieConsentSimplified = $cookieConsentSimplified;
-        $this->formAction              = $formAction;
+        $this->twigEnvironment          = $twigEnvironment;
+        $this->formFactory              = $formFactory;
+        $this->cookieChecker            = $cookieChecker;
+        $this->router                   = $router;
+        $this->cookieConsentTheme       = $cookieConsentTheme;
+        $this->privacyLink              = $privacyLink;
+        $this->cookieConsentPosition    = $cookieConsentPosition;
+        $this->translator               = $translator;
+        $this->cookieConsentSimplified  = $cookieConsentSimplified;
+        $this->cookieLogger             = $cookieLogger;
+        $this->cookieHandler            = $cookieHandler;
+        $this->useLogger                = $useLogger;
     }
 
     /**
      * Show cookie consent.
      *
-     * @Route("/cookie_consent", name="sulu_cookie_consent.show")
+     * @Route("/cookie_consent", name="sulu_cookie_consent.show", methods={"GET"})
      */
     public function show(Request $request): Response
     {
         $this->setLocale($request);
+        $form = $this->createCookieConsentForm();
         $response = new Response(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
                 'form'          => $this->createCookieConsentForm()->createView(),
@@ -125,7 +145,7 @@ class CookieConsentController
     /**
      * Show cookie consent.
      *
-     * @Route("/cookie_consent_alt", name="sulu_cookie_consent.show_if_cookie_consent_not_set")
+     * @Route("/cookie_consent_no_agreement", name="sulu_cookie_consent.no_agreement", methods={"GET"})
      */
     public function showIfCookieConsentNotSet(Request $request): Response
     {
@@ -137,21 +157,43 @@ class CookieConsentController
     }
 
     /**
+     * Show cookie consent.
+     *
+     * @Route("/_cookie/agreement", name="sulu_cookie_consent.agreement", methods={"POST"})
+     */
+    public function cookieConsentAgreement(Request $request): Response
+    {
+        $form = $this->createCookieConsentForm();
+        $form->handleRequest($request);
+        $response = new JsonResponse(['success' => false]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $response->setData(['success' => true]);
+            /* Deactivate Cache for this token action */
+            $response->setSharedMaxAge(0);
+            $response->setMaxAge(0);
+            // set shared will set the request to public so it need to be done after shared max set to 0
+            $response->setPrivate();
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $this->handleFormSubmit($form->getData(), $request, $response);
+        }
+        return $response;
+    }
+
+    /**
      * Create cookie consent form.
      */
     protected function createCookieConsentForm(): FormInterface
     {
-        if ($this->formAction === null) {
-            $form = $this->formFactory->create(CookieConsentType::class);
-        } else {
-            $form = $this->formFactory->create(
-                CookieConsentType::class,
-                null,
-                [
-                    'action' => $this->router->generate($this->formAction),
-                ]
-            );
-        }
+        $form = $this->formFactory->create(
+            CookieConsentType::class,
+            null,
+            [
+                'action' => $this->router->generate('sulu_cookie_consent.agreement'),
+                'method' => 'POST',
+            ]
+        );
 
         return $form;
     }
@@ -166,5 +208,31 @@ class CookieConsentController
             $this->translator->setLocale($locale);
             $request->setLocale($locale);
         }
+    }
+
+    /**
+     * Handle form submit.
+     */
+    protected function handleFormSubmit(array $data, Request $request, Response $response): void
+    {
+        if (false === array_key_exists('categories', $data)) {
+            return;
+        }
+        $cookieConsentKey = $this->getCookieConsentKey($request);
+
+        $categories = $data['categories'];
+        $this->cookieHandler->save($categories, $cookieConsentKey, $response);
+        $this->cookieConsentSaved = true;
+        if ($this->useLogger) {
+            $this->cookieLogger->log($categories, $cookieConsentKey);
+        }
+    }
+
+    /**
+     *  Return existing key from cookies or create new one.
+     */
+    protected function getCookieConsentKey(Request $request): string
+    {
+        return $request->cookies->get(CookieNameEnum::COOKIE_CONSENT_KEY_NAME) ?? uniqid('', true);
     }
 }

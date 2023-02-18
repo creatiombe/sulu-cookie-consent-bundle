@@ -14,7 +14,6 @@ services:
             $cookieConsentSimplified: '%cookie_consent.simplified%'
             $httpOnly: '%cookie_consent.http_only%'
             $privacyLink: '%cookie_consent.privacy_link%'
-            $formAction: '%cookie_consent.form_action%'
 
     Creatiom\Bundle\SuluCookieConsentBundle\:
         resource: '../../'

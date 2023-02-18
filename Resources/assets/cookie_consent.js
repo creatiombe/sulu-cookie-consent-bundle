@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function() {
             var btn = cookieConsentFormBtn[i];
             btn.addEventListener('click', function (event) {
                 event.preventDefault();
-                var formAction = cookieConsentForm.action ? cookieConsentForm.action : location.href;
                 var xhr = new XMLHttpRequest();
                 if(event.target.getAttribute('id') === 'cookie_consent_only_necessary') {
 
@@ -34,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.dispatchEvent(buttonEvent);
                     }
                 };
-                xhr.open('POST', formAction);
+                xhr.open('POST', cookieConsentForm.getAttribute('action'));
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.send(serializeForm(cookieConsentForm, event.target));
             }, false);
