@@ -152,8 +152,12 @@ class CookieConsentController
         if ($this->cookieChecker->isCookieConsentSavedByUser() === false) {
             return $this->show($request);
         }
-
-        return new Response();
+        // Cache in ESI should not be shared
+        $response = new Response();
+        $response->setPublic();
+        $response->setMaxAge(0);
+        $response->setSharedMaxAge(0);
+        return $response;
     }
 
     /**
