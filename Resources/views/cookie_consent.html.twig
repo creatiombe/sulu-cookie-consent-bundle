@@ -227,7 +227,7 @@
         checkXhr.onload = function () {
             if (checkXhr.status >= 200) {
                 var response = JSON.parse(checkXhr.responseText);
-                if (response.cookie_consent === 'true') {
+                if (response.cookie_consent) {
                     cookieConsent.classList.add('cookie-consent__hidden');
                 } else {
                     cookieConsent.classList.add('cookie-consent__open');

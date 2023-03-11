@@ -6,7 +6,6 @@ namespace Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber;
 use FOS\HttpCache\ResponseTagger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class RequestSubscriber implements EventSubscriberInterface
 {
@@ -20,10 +19,10 @@ class RequestSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ResponseEvent::class => 'onKernelResponse',
+            RequestEvent::class => 'onKernelRequest',
         ];
     }
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMainRequest()) {
             // don't do anything if it's not the main request
