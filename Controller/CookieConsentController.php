@@ -134,7 +134,6 @@ class CookieConsentController
         $response->setMaxAge(-1);
         $response->setPublic();
         $response->setSharedMaxAge(-1);
-        $this->responseTagger->addTags(['sulu_cookie_consent','info']);
         return $response;
     }
 
@@ -158,9 +157,6 @@ class CookieConsentController
         );
 
         // Cache in ESI should not be shared
-        $response->setVary('Cookies', true);
-        $response->setMaxAge(0);
-        $response->setPublic();
         $this->responseTagger->addTags(['sulu_cookie_consent','notset']);
         return $response;
     }
@@ -179,9 +175,6 @@ class CookieConsentController
         // Cache in ESI should not be shared
         $response = new Response();
         /* Deactivate Cache for this token action */
-        $response->setVary('Cookies', true);
-        $response->setMaxAge(0);
-        $response->setPublic();
         $this->responseTagger->addTags(['sulu_cookie_consent','set']);
         return $response;
     }
@@ -199,9 +192,6 @@ class CookieConsentController
         if ($form->isSubmitted() && $form->isValid()) {
             $response->setData(['success' => true]);
             /* Deactivate Cache for this token action */
-            $response->setVary('Cookies', true);
-            $response->setMaxAge(0);
-            $response->setPublic();
             $this->responseTagger->addTags(['sulu_cookie_consent','submitted']);
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
