@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use FOS\HttpCache\ResponseTagger;
 use Twig\Environment;
 
 class CookieConsentController
@@ -86,6 +87,7 @@ class CookieConsentController
      * @var bool
      */
     private $useLogger;
+    private ResponseTagger $responseTagger;
 
     public function __construct(
         Environment $twigEnvironment,
@@ -99,7 +101,8 @@ class CookieConsentController
         bool $cookieConsentSimplified = false,
         CookieLogger $cookieLogger,
         CookieHandler $cookieHandler,
-        bool $useLogger = false
+        bool $useLogger = false,
+        ResponseTagger $responseTagger
     ) {
         $this->twigEnvironment          = $twigEnvironment;
         $this->formFactory              = $formFactory;
@@ -113,6 +116,7 @@ class CookieConsentController
         $this->cookieLogger             = $cookieLogger;
         $this->cookieHandler            = $cookieHandler;
         $this->useLogger                = $useLogger;
+        $this->responseTagger           = $responseTagger;
     }
 
     /**
@@ -135,10 +139,10 @@ class CookieConsentController
         );
 
         // Cache in ESI should not be shared
-        $response->setPublic();
+        $response->setVary('Cookies', true);
         $response->setMaxAge(0);
-        $response->setSharedMaxAge(0);
-
+        $response->setPrivate();
+        $this->responseTagger->addTags(['sulu_cookie_consent','notset']);
         return $response;
     }
 
@@ -154,9 +158,11 @@ class CookieConsentController
         }
         // Cache in ESI should not be shared
         $response = new Response();
-        $response->setPublic();
+        /* Deactivate Cache for this token action */
+        $response->setVary('Cookies', true);
         $response->setMaxAge(0);
-        $response->setSharedMaxAge(0);
+        $response->setPrivate();
+        $this->responseTagger->addTags(['sulu_cookie_consent','set']);
         return $response;
     }
 
@@ -173,13 +179,10 @@ class CookieConsentController
         if ($form->isSubmitted() && $form->isValid()) {
             $response->setData(['success' => true]);
             /* Deactivate Cache for this token action */
-            $response->setSharedMaxAge(0);
+            $response->setVary('Cookies', true);
             $response->setMaxAge(0);
-            // set shared will set the request to public so it need to be done after shared max set to 0
             $response->setPrivate();
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->headers->addCacheControlDirective('no-store', true);
+            $this->responseTagger->addTags(['sulu_cookie_consent','submitted']);
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
         return $response;
