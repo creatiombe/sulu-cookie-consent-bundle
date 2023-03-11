@@ -119,10 +119,29 @@ class CookieConsentController
         $this->responseTagger           = $responseTagger;
     }
 
+
+    /**
+     * @Route("/_cookie_consent/check", name="sulu_cookie_consent.set", methods={"GET"})
+     */
+    public function check(Request $request): Response
+    {
+        $response = new JsonResponse(
+            [
+                'cookie_consent' => $this->cookieChecker->isCookieConsentSavedByUser(),
+            ]
+        );
+        // Cache in ESI should not be shared
+        $response->setMaxAge(-1);
+        $response->setPublic();
+        $response->setSharedMaxAge(-1);
+        $this->responseTagger->addTags(['sulu_cookie_consent','info']);
+        return $response;
+    }
+
     /**
      * Show cookie consent.
      *
-     * @Route("/cookie_consent", name="sulu_cookie_consent.show", methods={"GET"})
+     * @Route("/_cookie_consent/consent", name="sulu_cookie_consent.show", methods={"GET"})
      */
     public function show(Request $request): Response
     {
@@ -141,7 +160,7 @@ class CookieConsentController
         // Cache in ESI should not be shared
         $response->setVary('Cookies', true);
         $response->setMaxAge(0);
-        $response->setPrivate();
+        $response->setPublic();
         $this->responseTagger->addTags(['sulu_cookie_consent','notset']);
         return $response;
     }
@@ -149,10 +168,11 @@ class CookieConsentController
     /**
      * Show cookie consent.
      *
-     * @Route("/cookie_consent_no_agreement", name="sulu_cookie_consent.no_agreement", methods={"GET"})
+     * @Route("/_cookie_consent/no_agreement", name="sulu_cookie_consent.no_agreement", methods={"GET"})
      */
     public function showIfCookieConsentNotSet(Request $request): Response
     {
+        return $this->show($request);
         if ($this->cookieChecker->isCookieConsentSavedByUser() === false) {
             return $this->show($request);
         }
@@ -161,7 +181,7 @@ class CookieConsentController
         /* Deactivate Cache for this token action */
         $response->setVary('Cookies', true);
         $response->setMaxAge(0);
-        $response->setPrivate();
+        $response->setPublic();
         $this->responseTagger->addTags(['sulu_cookie_consent','set']);
         return $response;
     }
@@ -169,7 +189,7 @@ class CookieConsentController
     /**
      * Show cookie consent.
      *
-     * @Route("/_cookie/agreement", name="sulu_cookie_consent.agreement", methods={"POST"})
+     * @Route("/_cookie_consent/agreement", name="sulu_cookie_consent.agreement", methods={"POST"})
      */
     public function cookieConsentAgreement(Request $request): Response
     {
@@ -181,7 +201,7 @@ class CookieConsentController
             /* Deactivate Cache for this token action */
             $response->setVary('Cookies', true);
             $response->setMaxAge(0);
-            $response->setPrivate();
+            $response->setPublic();
             $this->responseTagger->addTags(['sulu_cookie_consent','submitted']);
             $this->handleFormSubmit($form->getData(), $request, $response);
         }

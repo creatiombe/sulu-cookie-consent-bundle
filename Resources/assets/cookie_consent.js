@@ -40,6 +40,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    var checkXhr = new XMLHttpRequest();
+    checkXhr.onload = function () {
+        if (xhr.status >= 200) {
+            var response = JSON.parse(checkXhr.responseText);
+            if (response.cookie_consent === 'true') {
+                alert('Cookie consent already set');
+            }
+        }
+    };
+    checkXhr.open('GET', '/_cookie_consent/check');
+    checkXhr.send();
 });
 
 function serializeForm(form, clickedButton) {
