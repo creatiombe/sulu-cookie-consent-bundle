@@ -14,16 +14,15 @@ use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
 use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
 use Creatiom\Bundle\SuluCookieConsentBundle\Form\CookieConsentType;
+use FOS\HttpCache\ResponseTagger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use FOS\HttpCache\ResponseTagger;
 use Twig\Environment;
 
 class CookieConsentController
@@ -104,21 +103,20 @@ class CookieConsentController
         bool $useLogger = false,
         ResponseTagger $responseTagger
     ) {
-        $this->twigEnvironment          = $twigEnvironment;
-        $this->formFactory              = $formFactory;
-        $this->cookieChecker            = $cookieChecker;
-        $this->router                   = $router;
-        $this->cookieConsentTheme       = $cookieConsentTheme;
-        $this->privacyLink              = $privacyLink;
-        $this->cookieConsentPosition    = $cookieConsentPosition;
-        $this->translator               = $translator;
-        $this->cookieConsentSimplified  = $cookieConsentSimplified;
-        $this->cookieLogger             = $cookieLogger;
-        $this->cookieHandler            = $cookieHandler;
-        $this->useLogger                = $useLogger;
-        $this->responseTagger           = $responseTagger;
+        $this->twigEnvironment = $twigEnvironment;
+        $this->formFactory = $formFactory;
+        $this->cookieChecker = $cookieChecker;
+        $this->router = $router;
+        $this->cookieConsentTheme = $cookieConsentTheme;
+        $this->privacyLink = $privacyLink;
+        $this->cookieConsentPosition = $cookieConsentPosition;
+        $this->translator = $translator;
+        $this->cookieConsentSimplified = $cookieConsentSimplified;
+        $this->cookieLogger = $cookieLogger;
+        $this->cookieHandler = $cookieHandler;
+        $this->useLogger = $useLogger;
+        $this->responseTagger = $responseTagger;
     }
-
 
     /**
      * @Route("/_cookie_consent/check", name="sulu_cookie_consent.set", methods={"GET"})
@@ -134,6 +132,7 @@ class CookieConsentController
         $response->setMaxAge(-1);
         $response->setPublic();
         $response->setSharedMaxAge(-1);
+
         return $response;
     }
 
@@ -148,16 +147,19 @@ class CookieConsentController
         $form = $this->createCookieConsentForm();
         $response = new Response(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
-                'form'          => $this->createCookieConsentForm()->createView(),
-                'privacy_link'  => $this->privacyLink,
-                'theme'         => $this->cookieConsentTheme,
-                'position'      => $this->cookieConsentPosition,
-                'simplified'    => $this->cookieConsentSimplified,
+                'form' => $this->createCookieConsentForm()->createView(),
+                'privacy_link' => $this->privacyLink,
+                'theme' => $this->cookieConsentTheme,
+                'position' => $this->cookieConsentPosition,
+                'simplified' => $this->cookieConsentSimplified,
             ])
         );
 
         // Cache in ESI should not be shared
-        $this->responseTagger->addTags(['sulu_cookie_consent','notset']);
+        $this->responseTagger->addTags(['sulu_cookie_consent', 'notset']);
+        $response->setMaxAge(-1);
+        $response->setPublic();
+        $response->setSharedMaxAge(-1);
         return $response;
     }
 
@@ -168,14 +170,16 @@ class CookieConsentController
      */
     public function showIfCookieConsentNotSet(Request $request): Response
     {
-        return $this->show($request);
-        if ($this->cookieChecker->isCookieConsentSavedByUser() === false) {
+        if (false === $this->cookieChecker->isCookieConsentSavedByUser()) {
             return $this->show($request);
         }
         // Cache in ESI should not be shared
         $response = new Response();
         /* Deactivate Cache for this token action */
-        $this->responseTagger->addTags(['sulu_cookie_consent','set']);
+        $this->responseTagger->addTags(['sulu_cookie_consent', 'set']);
+        $response->setMaxAge(-1);
+        $response->setPublic();
+        $response->setSharedMaxAge(-1);
         return $response;
     }
 
@@ -192,9 +196,12 @@ class CookieConsentController
         if ($form->isSubmitted() && $form->isValid()) {
             $response->setData(['success' => true]);
             /* Deactivate Cache for this token action */
-            $this->responseTagger->addTags(['sulu_cookie_consent','submitted']);
+            $this->responseTagger->addTags(['sulu_cookie_consent', 'submitted']);
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
+        $response->setMaxAge(-1);
+        $response->setPublic();
+        $response->setSharedMaxAge(-1);
         return $response;
     }
 
@@ -221,7 +228,7 @@ class CookieConsentController
     protected function setLocale(Request $request)
     {
         $locale = $request->get('locale');
-        if (empty($locale) === false) {
+        if (false === empty($locale)) {
             $this->translator->setLocale($locale);
             $request->setLocale($locale);
         }
