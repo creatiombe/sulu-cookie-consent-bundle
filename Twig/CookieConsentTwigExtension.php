@@ -42,9 +42,14 @@ class CookieConsentTwigExtension extends AbstractExtension
      */
     public function isCookieConsentSavedByUser(array $context): bool
     {
-        $cookieChecker = $this->getCookieChecker($context['app']->getRequest());
+        /** @var Request $request */
+        $request = $context['app']->getRequest();
 
-        return $cookieChecker->isCookieConsentSavedByUser();
+        if ($request->query->has('preview')) {
+            return true;
+        }
+
+        return $this->getCookieChecker($request)->isCookieConsentSavedByUser();
     }
 
     /**
@@ -52,9 +57,13 @@ class CookieConsentTwigExtension extends AbstractExtension
      */
     public function isCategoryAllowedByUser(array $context, string $category): bool
     {
-        $cookieChecker = $this->getCookieChecker($context['app']->getRequest());
+        $request = $context['app']->getRequest();
 
-        return $cookieChecker->isCategoryAllowedByUser($category);
+        if ($request->query->has('preview')) {
+            return true;
+        }
+
+        return $this->getCookieChecker($request)->isCategoryAllowedByUser($category);
     }
 
     /**

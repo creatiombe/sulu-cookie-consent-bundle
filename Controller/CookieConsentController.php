@@ -132,7 +132,6 @@ class CookieConsentController
         $response->setMaxAge(-1);
         $response->setPublic();
         $response->setSharedMaxAge(-1);
-
         return $response;
     }
 
@@ -170,17 +169,7 @@ class CookieConsentController
      */
     public function showIfCookieConsentNotSet(Request $request): Response
     {
-        if (false === $this->cookieChecker->isCookieConsentSavedByUser()) {
-            return $this->show($request);
-        }
-        // Cache in ESI should not be shared
-        $response = new Response();
-        /* Deactivate Cache for this token action */
-        $this->responseTagger->addTags(['sulu_cookie_consent', 'set']);
-        $response->setMaxAge(-1);
-        $response->setPublic();
-        $response->setSharedMaxAge(-1);
-        return $response;
+        return $this->show($request);
     }
 
     /**
