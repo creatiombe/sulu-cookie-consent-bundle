@@ -119,23 +119,6 @@ class CookieConsentController
     }
 
     /**
-     * @Route("/_cookie_consent/check", name="sulu_cookie_consent.set", methods={"GET"})
-     */
-    public function check(Request $request): Response
-    {
-        $response = new JsonResponse(
-            [
-                'cookie_consent' => $this->cookieChecker->isCookieConsentSavedByUser(),
-            ]
-        );
-        // Cache in ESI should not be shared
-        $response->setMaxAge(-1);
-        $response->setPublic();
-        $response->setSharedMaxAge(-1);
-        return $response;
-    }
-
-    /**
      * Show cookie consent.
      *
      * @Route("/_cookie_consent/consent", name="sulu_cookie_consent.show", methods={"GET"})
@@ -155,21 +138,7 @@ class CookieConsentController
         );
 
         // Cache in ESI should not be shared
-        $this->responseTagger->addTags(['sulu_cookie_consent', 'notset']);
-        $response->setMaxAge(-1);
-        $response->setPublic();
-        $response->setSharedMaxAge(-1);
         return $response;
-    }
-
-    /**
-     * Show cookie consent.
-     *
-     * @Route("/_cookie_consent/no_agreement", name="sulu_cookie_consent.no_agreement", methods={"GET"})
-     */
-    public function showIfCookieConsentNotSet(Request $request): Response
-    {
-        return $this->show($request);
     }
 
     /**
@@ -185,7 +154,6 @@ class CookieConsentController
         if ($form->isSubmitted() && $form->isValid()) {
             $response->setData(['success' => true]);
             /* Deactivate Cache for this token action */
-            $this->responseTagger->addTags(['sulu_cookie_consent', 'submitted']);
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
         $response->setMaxAge(-1);

@@ -1,8 +1,4 @@
 {% form_theme form '@SuluCookieConsent/form/cookie_consent_theme.html.twig' %}
-
-{#{% block script %}#}
-{#    <script type="text/javascript" src="{{ asset('bundles/sulucookieconsent/js/cookie_consent.js') }}"></script>#}
-{#{% endblock %}#}
 <div class="cookie-consent {{ position.vertical|default('bottom') }}-0 {{ position.horizontal|default('left') }}-0">
     {{ form_start(form, {'attr': {'class': 'cookie-consent__form'}}) }}
     <div class="cookie-consent__cookie-block">
@@ -223,19 +219,6 @@
             }
         }
 
-        var checkXhr = new XMLHttpRequest();
-        checkXhr.onload = function () {
-            if (checkXhr.status >= 200) {
-                var response = JSON.parse(checkXhr.responseText);
-                if (response.cookie_consent) {
-                    cookieConsent.classList.add('cookie-consent__hidden');
-                } else {
-                    cookieConsent.classList.add('cookie-consent__open');
-                }
-            }
-        };
-        checkXhr.open('GET', '/_cookie_consent/check');
-        checkXhr.send();
     });
 
     function serializeForm(form, clickedButton) {

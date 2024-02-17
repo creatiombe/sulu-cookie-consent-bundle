@@ -25,13 +25,13 @@ class CookieConsentTwigExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'cookieconsent_isCookieConsentSavedByUser',
-                [$this, 'isCookieConsentSavedByUser'],
+                'cookieconsent_show',
+                [$this, 'showCookieConsent'],
                 ['needs_context' => true]
             ),
             new TwigFunction(
-                'cookieconsent_isCategoryAllowedByUser',
-                [$this, 'isCategoryAllowedByUser'],
+                'cookieconsent_category',
+                [$this, 'hasCookieCategory'],
                 ['needs_context' => true]
             ),
         ];
@@ -40,27 +40,27 @@ class CookieConsentTwigExtension extends AbstractExtension
     /**
      * Checks if user has sent cookie consent form.
      */
-    public function isCookieConsentSavedByUser(array $context): bool
+    public function showCookieConsent(array $context): bool
     {
         /** @var Request $request */
         $request = $context['app']->getRequest();
 
         if ($request->query->has('preview')) {
-            return true;
+            return false;
         }
 
-        return $this->getCookieChecker($request)->isCookieConsentSavedByUser();
+        return !$this->getCookieChecker($request)->isCookieConsentSavedByUser();
     }
 
     /**
      * Checks if user has given permission for cookie category.
      */
-    public function isCategoryAllowedByUser(array $context, string $category): bool
+    public function hasCookieCategory(array $context, string $category): bool
     {
         $request = $context['app']->getRequest();
 
         if ($request->query->has('preview')) {
-            return true;
+            return false;
         }
 
         return $this->getCookieChecker($request)->isCategoryAllowedByUser($category);

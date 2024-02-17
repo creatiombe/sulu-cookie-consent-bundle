@@ -26,11 +26,8 @@
 .cookie-consent {
   @apply overflow-y-auto block fixed items-center md:m-4 bg-white bg-gradient-to-b from-white to-gray-200 shadow md:border border-gray-300 items-center md:rounded-lg md:shadow-lg z-50 max-h-screen;
   &.bottom-0 {
-    @apply border-t hidden;
-    &.cookie-consent__open {
-      @apply block;
-      animation: cookie-bottom 600ms cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    @apply block border-t;
+    animation: cookie-bottom 600ms cubic-bezier(0.22, 1, 0.36, 1);
     transition: transform 300ms ease-out, opacity 300ms ease-out;
     &.cookie-consent__hide {
       opacity: 0;
@@ -39,11 +36,8 @@
   }
 
   &.top-0 {
-    @apply border-b hidden;
-    &.cookie-consent__open {
-      @apply block;
-      animation: cookie-top 600ms cubic-bezier(0.22, 1, 0.36, 1);
-    }
+    @apply block border-b;
+    animation: cookie-top 600ms cubic-bezier(0.22, 1, 0.36, 1);
     transition: transform 300ms ease-out, opacity 300ms ease-out;
     &.cookie-consent__hide {
       opacity: 0;
