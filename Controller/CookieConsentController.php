@@ -97,10 +97,10 @@ class CookieConsentController
         string $privacyLink,
         array $cookieConsentPosition,
         TranslatorInterface $translator,
-        bool $cookieConsentSimplified = false,
+        bool $cookieConsentSimplified,
         CookieLogger $cookieLogger,
         CookieHandler $cookieHandler,
-        bool $useLogger = false,
+        bool $useLogger,
         ResponseTagger $responseTagger
     ) {
         $this->twigEnvironment = $twigEnvironment;
@@ -156,9 +156,6 @@ class CookieConsentController
             /* Deactivate Cache for this token action */
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
-        $response->setMaxAge(-1);
-        $response->setPublic();
-        $response->setSharedMaxAge(-1);
         return $response;
     }
 

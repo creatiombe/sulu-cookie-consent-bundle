@@ -1,14 +1,13 @@
 <?php
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber;
+namespace Creatiom\Bundle\SuluCookieConsentBundle\EventListener;
 
 use FOS\HttpCache\ResponseTagger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestSubscriber implements EventSubscriberInterface
+class RequestListener implements EventSubscriberInterface
 {
     private ResponseTagger $responseTagger;
 
@@ -19,18 +18,16 @@ class RequestSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return [
-            KernelEvents::CONTROLLER => 'onKernelController',
-        ];
+        return [KernelEvents::REQUEST => ['onRequest', 35]];
     }
 
-    public function onKernelController(ControllerEvent $controllerEvent)
+    public function onRequest(RequestEvent $event)
     {
-        if (!$controllerEvent->isMainRequest()) {
+        if (!$event->isMainRequest()) {
             // don't do anything if it's not the main request
             return;
         }
-        if ($controllerEvent->getRequest()->cookies->has('cookie_consent')) {
+        if ($event->getRequest()->cookies->has('cookie_consent')) {
             $this->responseTagger->addTags(['cookie_consent']);
         } else {
             $this->responseTagger->addTags(['no_cookie_consent']);

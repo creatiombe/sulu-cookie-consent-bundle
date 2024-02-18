@@ -45,7 +45,7 @@ class CookieConsentTwigExtension extends AbstractExtension
         /** @var Request $request */
         $request = $context['app']->getRequest();
 
-        if ($request->query->has('preview')) {
+        if ($request->attributes->has('preview')) {
             return false;
         }
 
@@ -59,7 +59,7 @@ class CookieConsentTwigExtension extends AbstractExtension
     {
         $request = $context['app']->getRequest();
 
-        if ($request->query->has('preview')) {
+        if ($request->attributes->has('preview')) {
             return false;
         }
 
