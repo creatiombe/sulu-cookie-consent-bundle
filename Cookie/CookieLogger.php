@@ -29,7 +29,7 @@ class CookieLogger
     public function __construct(ManagerRegistry $registry, ?Request $request)
     {
         $this->entityManager = $registry->getManagerForClass(CookieConsentLog::class);
-        $this->request       = $request;
+        $this->request = $request;
     }
 
     /**
@@ -37,14 +37,14 @@ class CookieLogger
      */
     public function log(array $categories, string $key): void
     {
-        if ($this->request === null) {
+        if (null === $this->request) {
             throw new \RuntimeException('No request found');
         }
 
         $ip = $this->anonymizeIp($this->request->getClientIp());
 
         foreach ($categories as $category => $value) {
-            $this->persistCookieConsentLog($category, $value, $ip, $key);
+            $this->persistCookieConsentLog($category, (string)$value, $ip, $key);
         }
 
         $this->entityManager->flush();
@@ -67,12 +67,12 @@ class CookieLogger
      */
     protected function anonymizeIp(?string $ip): string
     {
-        if ($ip === null) {
+        if (null === $ip) {
             return 'unknown';
         }
 
-        $lastDot = strrpos($ip, '.') + 1;
+        $lastDot = \strrpos($ip, '.') + 1;
 
-        return substr($ip, 0, $lastDot).str_repeat('x', strlen($ip) - $lastDot);
+        return \substr($ip, 0, $lastDot) . \str_repeat('x', \strlen($ip) - $lastDot);
     }
 }
