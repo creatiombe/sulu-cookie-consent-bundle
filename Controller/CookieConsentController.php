@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Creatiom\Bundle\SuluCookieConsentBundle\Controller;
 
+use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
 use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
@@ -45,9 +46,16 @@ class CookieConsentController
     #[Route('/_cookie_consent/consent', name: 'sulu_cookie_consent.show', methods: ['GET'])]
     public function show(Request $request): Response
     {
+        $response = new Response();
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('max-age', '0');
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->headers->addCacheControlDirective('no-store', true);
+        if ($this->getCookieChecker($request)->isCookieConsentSavedByUser()) {
+            return $response;
+        }
         $this->setLocale($request);
-        $form = $this->createCookieConsentForm();
-        $response = new Response(
+        $response->setContent(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
                 'form' => $this->createCookieConsentForm()->createView(),
                 'privacy_link' => $this->privacyLink,
@@ -129,5 +137,13 @@ class CookieConsentController
     protected function getCookieConsentKey(Request $request): string
     {
         return $request->cookies->get(CookieNameEnum::COOKIE_CONSENT_KEY_NAME) ?? \uniqid('', true);
+    }
+
+    /**
+     * Get instance of CookieChecker.
+     */
+    private function getCookieChecker(Request $request): CookieChecker
+    {
+        return new CookieChecker($request);
     }
 }
