@@ -29,3 +29,10 @@ services:
     Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger:
         arguments:
             $request: "@=service('request_stack').getCurrentRequest()"
+
+    Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber\TagsSubscriber:
+        arguments:
+            $symfonyResponseTagger: '@fos_http_cache.http.symfony_response_tagger'
+            $requestStack: '@request_stack'
+        tags:
+            - { name: kernel.event_subscriber }
