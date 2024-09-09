@@ -53,9 +53,6 @@ class CookieConsentController
         $response = new Response();
         $response->headers->addCacheControlDirective('no-cache', true);
         $response->headers->addCacheControlDirective('no-store', true);
-        if ($this->getCookieChecker($request)->isCookieConsentSavedByUser()) {
-            return $response;
-        }
         $this->setLocale($request);
         $response->setContent(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
@@ -140,13 +137,5 @@ class CookieConsentController
     protected function getCookieConsentKey(Request $request): string
     {
         return $request->cookies->get(CookieNameEnum::COOKIE_CONSENT_KEY_NAME) ?? \uniqid('', true);
-    }
-
-    /**
-     * Get instance of CookieChecker.
-     */
-    private function getCookieChecker(Request $request): CookieChecker
-    {
-        return new CookieChecker($request);
     }
 }
