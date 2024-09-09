@@ -32,7 +32,8 @@ class TagsSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::RESPONSE => ['addTags', 35],
+            KernelEvents::RESPONSE => ['addTags', 5],
+            KernelEvents::REQUEST => ['addTags', 5],
         ];
     }
 
