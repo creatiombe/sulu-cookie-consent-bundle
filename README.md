@@ -1,8 +1,3 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ConnectHolland/cookie-consent-bundle/badges/quality-score.png?b=master&s=15b793ae2474fa313d343c43f30ce4f9aa594f00)](https://scrutinizer-ci.com/g/ConnectHolland/cookie-consent-bundle/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/ConnectHolland/cookie-consent-bundle/badges/coverage.png?b=master&s=d8e84bcf2e3e5bed47d4c6aa4702f246de74dbdf)](https://scrutinizer-ci.com/g/ConnectHolland/cookie-consent-bundle/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/ConnectHolland/cookie-consent-bundle/badges/build.png?b=master&s=bcccde957df75df8622fa346ba348dee002efebb)](https://scrutinizer-ci.com/g/ConnectHolland/cookie-consent-bundle/build-status/master)
-
-
 # Cookie Consent bundle for Symfony
 Symfony bundle to append Cookie Consent to your website to comply to AVG/GDPR for cookies.
 
@@ -11,7 +6,7 @@ Symfony bundle to append Cookie Consent to your website to comply to AVG/GDPR fo
 ### Step 1: Download using composer
 In a Symfony application run this command to install and integrate Cookie Consent bundle in your application:
 ```bash
-composer require connectholland/cookie-consent-bundle
+composer require creatiom/sulu-cookie-consent-bundle
 ```
 
 ### Step 2: Enable the bundle
@@ -35,25 +30,25 @@ When not using symfony flex, enable the bundles routing manually:
 ```yaml
 # app/config/routing.yml
 sulu_cookie_consent:
-    resource: "@SuluCookieConsentBundle/Resources/config/routing.yaml"
+  resource: "@SuluCookieConsentBundle/Resources/config/routing.yaml"
 ```
 
 ### Step 4: Configure to your needs
 Configure your Cookie Consent with the following possible settings
 ```yaml
 sulu_cookie_consent:
-    theme: 'light' # light, dark
-    categories: # Below are the default supported categories
-        - 'analytics'
-        - 'tracking'
-        - 'marketing'
-        - 'social_media'
-    use_logger: true # Logs user actions to database
-    position: 'top' # top, bottom
-    simplified: false # When set to true the user can only deny or accept all cookies at once
-    http_only: true # Sets HttpOnly on cookies
-    form_action: routeName # When set, xhr-Requests will only be sent to this route. Take care of having the route available.
-    csrf_protection: true # The cookie consent form is csrf protected or not
+  theme: 'light' # light, dark
+  categories: # Below are the default supported categories
+    - 'analytics'
+    - 'tracking'
+    - 'marketing'
+    - 'social_media'
+  use_logger: true # Logs user actions to database
+  position: 'top' # top, bottom
+  simplified: false # When set to true the user can only deny or accept all cookies at once
+  http_only: true # Sets HttpOnly on cookies
+  form_action: routeName # When set, xhr-Requests will only be sent to this route. Take care of having the route available.
+  csrf_protection: true # The cookie consent form is csrf protected or not
 ```
 
 ## Usage
@@ -150,7 +145,7 @@ You can override the templates by placing templates inside your project (except 
 ```
 
 #### Template override for Symfony 5 projects
-You can override the templates by placing templaces inside you project as below. Be careful, it is important to place templates at this location: "app/templates/bundles/CookieConsentBundle/" . 
+You can override the templates by placing templaces inside you project as below. Be careful, it is important to place templates at this location: "app/templates/bundles/CookieConsentBundle/" .
 ```twig
 # app/templates/bundles/CookieConsentBundle/cookie_consent.html.twig
 {% extends '@!SuluCookieConsent/cookie_consent.html.twig' %}
