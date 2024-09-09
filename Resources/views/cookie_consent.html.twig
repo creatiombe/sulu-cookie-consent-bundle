@@ -1,5 +1,5 @@
 {% form_theme form '@SuluCookieConsent/form/cookie_consent_theme.html.twig' %}
-<div class="cookie-consent {{ position.vertical|default('bottom') }}-0 {{ position.horizontal|default('left') }}-0">
+<div class="cookie-consent cookie-consent__hide">
     {{ form_start(form, {'attr': {'class': 'cookie-consent__form'}}) }}
     <div class="cookie-consent__cookie-block">
         <div class="cookie">
@@ -179,6 +179,7 @@
     {{ form_end(form) }}
 </div>
 <script type="text/javascript">
+    const cookie=Object.defineProperties({},{get:{value(a){if("string"==typeof a){const b=this.cookie.match(new RegExp(`(?:^|; )${a.replace(/([.$?*|{}()[\]\\/+^])/g,"$1")}=([^;]*)`));if(b&&"string"==typeof b[1])return decodeURIComponent(b[1])}return null}},getAll:{value(){const a={},b=this.cookie.split("; ");for(let c=0;c<b.length;c+=1){const[d,e]=b[c].split("=");d&&(a[d]=decodeURIComponent(e||""))}return a}},has:{value(a){return null!==this.get(a)}},set:{value(a,b,c){const d={path:"/",...c};let e=`${encodeURIComponent(a)}=${void 0===b?"":encodeURIComponent(b)}`;return Object.keys(d).forEach(a=>{const b=a,c=d[b];let f,g;"expires"===b?(f=b,g=c instanceof Date?c.toUTCString():c):"maxAge"===b?(f="max-age",g=c):"sameSite"===b?(f="samesite",g="none"===c||c):(f=b,g=c),e+=`; ${f}`;const h=("boolean"!=typeof g||!0!==g)&&void 0!==c;h&&(e+=`=${g}`)}),this.cookie=e,e}},delete:{value(a){this.set(a,"",{maxAge:-1})}},clear:{value(){Object.keys(this.getAll()).forEach(a=>this.delete(a))}},size:{get(){return Object.keys(this.getAll()).length}},cookie:{get(){try{return document.cookie}catch(a){return""}},set(a){try{document.cookie=a}catch(a){}}}});
     document.addEventListener("DOMContentLoaded", function() {
         var cookieConsent = document.querySelector('.cookie-consent');
         var cookieConsentForm = document.querySelector('.cookie-consent__form');
@@ -219,6 +220,12 @@
             }
         }
 
+        // Check if cookie_consent cookie is set
+        if (!cookie.has('cookie_consent')) {
+            cookieConsent.classList.remove('cookie-consent__hide');
+            cookieConsent.classList.add('{{ position.vertical|default('bottom') }}-0');
+            cookieConsent.classList.add('{{ position.horizontal|default('left') }}-0');
+        }
     });
 
     function serializeForm(form, clickedButton) {

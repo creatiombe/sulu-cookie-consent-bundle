@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Creatiom\Bundle\SuluCookieConsentBundle\Controller;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
 use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
 use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
@@ -67,7 +66,7 @@ class CookieConsentController
         // Cache in ESI should not be shared
         return $response;
     }
-    
+
     #[Cache(maxage: 0, smaxage: 0, public: false)]
     #[Route('/_cookie_consent/agreement', name: 'sulu_cookie_consent.agreement', methods: ['POST'])]
     public function cookieConsentAgreement(Request $request): Response
