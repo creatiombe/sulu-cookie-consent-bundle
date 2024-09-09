@@ -45,13 +45,10 @@ class CookieConsentController
     ) {
     }
 
-    #[Cache(maxage: 0, smaxage: 0, public: false, mustRevalidate: true)]
     #[Route('/_cookie_consent/consent', name: 'sulu_cookie_consent.show', methods: ['GET'])]
     public function show(Request $request): Response
     {
         $response = new Response();
-        $response->headers->addCacheControlDirective('no-cache', true);
-        $response->headers->addCacheControlDirective('no-store', true);
         $this->setLocale($request);
         $response->setContent(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
@@ -79,7 +76,6 @@ class CookieConsentController
             /* Deactivate Cache for this token action */
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
-
         return $response;
     }
 
