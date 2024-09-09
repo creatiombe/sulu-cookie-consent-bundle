@@ -42,7 +42,8 @@ class TagsSubscriber implements EventSubscriberInterface
      */
     public function addTags(): void
     {
-        if ($this->requestStack->getMainRequest() && $this->requestStack->getMainRequest()->cookies->has('cookie_consent')) {
+        if (($this->requestStack->getMainRequest() && $this->requestStack->getMainRequest()->cookies->has('cookie_consent'))
+            || ($this->requestStack->getCurrentRequest() && $this->requestStack->getCurrentRequest()->query->has('cookie_consent'))) {
             $cookieHash = $this->requestStack->getMainRequest()->cookies->get('cookie_consent');
             $this->symfonyResponseTagger->addTags(['cookie-consent', 'cookie-consent-' . \md5($cookieHash)]);
         } else {
