@@ -18,8 +18,10 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -40,16 +42,16 @@ class CookieConsentController
         private readonly CookieLogger $cookieLogger,
         private readonly CookieHandler $cookieHandler,
         private readonly bool $useLogger,
+        private RequestStack $requestStack,
     ) {
     }
 
+    #[Cache(maxage: 0, smaxage: 0, public: false, mustRevalidate: true)]
     #[Route('/_cookie_consent/consent', name: 'sulu_cookie_consent.show', methods: ['GET'])]
     public function show(Request $request): Response
     {
         $response = new Response();
         $response->headers->addCacheControlDirective('no-cache', true);
-        $response->headers->addCacheControlDirective('max-age', '0');
-        $response->headers->addCacheControlDirective('must-revalidate', true);
         $response->headers->addCacheControlDirective('no-store', true);
         if ($this->getCookieChecker($request)->isCookieConsentSavedByUser()) {
             return $response;
@@ -68,7 +70,8 @@ class CookieConsentController
         // Cache in ESI should not be shared
         return $response;
     }
-
+    
+    #[Cache(maxage: 0, smaxage: 0, public: false)]
     #[Route('/_cookie_consent/agreement', name: 'sulu_cookie_consent.agreement', methods: ['POST'])]
     public function cookieConsentAgreement(Request $request): Response
     {
