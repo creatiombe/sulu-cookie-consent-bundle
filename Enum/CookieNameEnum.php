@@ -7,7 +7,7 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Enum;
+namespace Creatiom\SuluCookieConsentBundle\Enum;
 
 class CookieNameEnum
 {

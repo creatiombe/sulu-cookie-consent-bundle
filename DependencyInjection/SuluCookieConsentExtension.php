@@ -7,7 +7,7 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\DependencyInjection;
+namespace Creatiom\SuluCookieConsentBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

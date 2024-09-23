@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle;
+namespace Creatiom\SuluCookieConsentBundle;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\DependencyInjection\SuluCookieConsentExtension;
+use Creatiom\SuluCookieConsentBundle\DependencyInjection\SuluCookieConsentExtension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -3,7 +3,7 @@
     "creatiom/sulu-cookie-consent-bundle": {
       "manifest": {
         "bundles": {
-          "Creatiom\\Bundle\\SuluCookieConsentBundle": [
+          "Creatiom\\SuluCookieConsentBundle": [
             "all"
           ]
         },

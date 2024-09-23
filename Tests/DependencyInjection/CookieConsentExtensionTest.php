@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Tests\DependencyInjection;
+namespace Creatiom\SuluCookieConsentBundle\Tests\DependencyInjection;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\DependencyInjection\CookieConsentExtension;
+use Creatiom\SuluCookieConsentBundle\DependencyInjection\CookieConsentExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;

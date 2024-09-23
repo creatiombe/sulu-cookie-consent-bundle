@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Cookie;
+namespace Creatiom\SuluCookieConsentBundle\Cookie;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
+use Creatiom\SuluCookieConsentBundle\Enum\CookieNameEnum;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 

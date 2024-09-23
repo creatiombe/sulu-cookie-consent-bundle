@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Cookie;
+namespace Creatiom\SuluCookieConsentBundle\Cookie;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Entity\CookieConsentLog;
+use Creatiom\SuluCookieConsentBundle\Entity\CookieConsentLog;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;

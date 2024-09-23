@@ -15,22 +15,22 @@ services:
             $httpOnly: '%cookie_consent.http_only%'
             $privacyLink: '%cookie_consent.privacy_link%'
 
-    Creatiom\Bundle\SuluCookieConsentBundle\:
+    Creatiom\SuluCookieConsentBundle\:
         resource: '../../'
         exclude: '../../{vendor}'
 
-    Creatiom\Bundle\SuluCookieConsentBundle\Controller\:
+    Creatiom\SuluCookieConsentBundle\Controller\:
         resource: '../../Controller/*'
         public: true
 
-    Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker:
+    Creatiom\SuluCookieConsentBundle\Cookie\CookieChecker:
         arguments: ["@=service('request_stack').getCurrentRequest()"]
 
-    Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger:
+    Creatiom\SuluCookieConsentBundle\Cookie\CookieLogger:
         arguments:
             $request: "@=service('request_stack').getCurrentRequest()"
 
-    Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber\TagsSubscriber:
+    Creatiom\SuluCookieConsentBundle\EventSubscriber\TagsSubscriber:
         arguments:
             $symfonyResponseTagger: '@fos_http_cache.http.symfony_response_tagger'
             $requestStack: '@request_stack'

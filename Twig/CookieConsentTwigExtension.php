@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Twig;
+namespace Creatiom\SuluCookieConsentBundle\Twig;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieChecker;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

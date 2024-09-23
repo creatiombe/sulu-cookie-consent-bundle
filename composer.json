@@ -32,12 +32,12 @@
     "autoload": {
         "exclude-from-classmap": ["/Tests/"],
         "psr-4": {
-            "Creatiom\\Bundle\\SuluCookieConsentBundle\\": ""
+            "Creatiom\\SuluCookieConsentBundle\\": ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Creatiom\\Bundle\\SuluCookieConsentBundle\\Tests\\": "/Tests"
+            "Creatiom\\SuluCookieConsentBundle\\Tests\\": "/Tests"
         }
     },
     "config": {

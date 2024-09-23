@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Tests\Cookie;
+namespace Creatiom\SuluCookieConsentBundle\Tests\Cookie;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 

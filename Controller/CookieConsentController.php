@@ -7,12 +7,12 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Controller;
+namespace Creatiom\SuluCookieConsentBundle\Controller;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
-use Creatiom\Bundle\SuluCookieConsentBundle\Enum\CookieNameEnum;
-use Creatiom\Bundle\SuluCookieConsentBundle\Form\CookieConsentType;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieHandler;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieLogger;
+use Creatiom\SuluCookieConsentBundle\Enum\CookieNameEnum;
+use Creatiom\SuluCookieConsentBundle\Form\CookieConsentType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -7,12 +7,12 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Tests\EventSubscriber;
+namespace Creatiom\SuluCookieConsentBundle\Tests\EventSubscriber;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieHandler;
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
-use Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber\CookieConsentFormSubscriber;
-use Creatiom\Bundle\SuluCookieConsentBundle\Form\CookieConsentType;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieHandler;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieLogger;
+use Creatiom\SuluCookieConsentBundle\EventSubscriber\CookieConsentFormSubscriber;
+use Creatiom\SuluCookieConsentBundle\Form\CookieConsentType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;

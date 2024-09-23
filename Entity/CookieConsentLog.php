@@ -7,7 +7,7 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Entity;
+namespace Creatiom\SuluCookieConsentBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;

@@ -7,10 +7,10 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Tests\Form;
+namespace Creatiom\SuluCookieConsentBundle\Tests\Form;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
-use Creatiom\Bundle\SuluCookieConsentBundle\Form\CookieConsentType;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieChecker;
+use Creatiom\SuluCookieConsentBundle\Form\CookieConsentType;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;

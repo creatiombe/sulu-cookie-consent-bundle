@@ -7,10 +7,10 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Tests\Cookie;
+namespace Creatiom\SuluCookieConsentBundle\Tests\Cookie;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieLogger;
-use Creatiom\Bundle\SuluCookieConsentBundle\Entity\CookieConsentLog;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieLogger;
+use Creatiom\SuluCookieConsentBundle\Entity\CookieConsentLog;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;

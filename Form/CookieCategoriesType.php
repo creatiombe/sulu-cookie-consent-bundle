@@ -7,9 +7,9 @@ declare(strict_types=1);
  * (c) Connect Holland.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\Form;
+namespace Creatiom\SuluCookieConsentBundle\Form;
 
-use Creatiom\Bundle\SuluCookieConsentBundle\Cookie\CookieChecker;
+use Creatiom\SuluCookieConsentBundle\Cookie\CookieChecker;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

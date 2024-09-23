@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Creatiom\Bundle\SuluCookieConsentBundle\EventSubscriber;
+namespace Creatiom\SuluCookieConsentBundle\EventSubscriber;
 
 use FOS\HttpCacheBundle\Http\SymfonyResponseTagger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

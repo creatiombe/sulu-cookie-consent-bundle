@@ -19,7 +19,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Creatiom\Bundle\SuluCookieConsentBundle\CookieConsentBundle(),
+        new Creatiom\SuluCookieConsentBundle\CookieConsentBundle(),
         // ...
     );
 }
