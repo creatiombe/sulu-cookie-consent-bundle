@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 @keyframes cookie-top {
   0% {
     transform: translateY(-120%);
@@ -232,7 +234,10 @@
   }
 
   &__info {
-    @apply prose prose-p:my-0 prose-a:no-underline items-center;
+    @apply items-center max-w-md;
+    p {
+      @apply my-0;
+    }
   }
 
   &__buttons {

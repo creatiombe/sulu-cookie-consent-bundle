@@ -26,7 +26,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-#[AsController]
+#[\AllowDynamicProperties] #[AsController]
 class CookieConsentController
 {
     public function __construct(
@@ -50,6 +50,16 @@ class CookieConsentController
     {
         $response = new Response();
         $this->setLocale($request);
+
+        $mainRequest = $this->requestStack->getMainRequest() ?? $request;
+        $contentKey = $this->getCookieConsentKey($mainRequest);
+        if ($contentKey && $mainRequest->cookies->has('cookie_consent')) {
+            return $response->setCache([
+                'max_age' => 0,
+                's_maxage' => 0,
+                'public' => false,
+            ])->setEtag($contentKey);
+        }
         $response->setContent(
             $this->twigEnvironment->render('@SuluCookieConsent/cookie_consent.html.twig', [
                 'form' => $this->createCookieConsentForm()->createView(),
@@ -76,6 +86,7 @@ class CookieConsentController
             /* Deactivate Cache for this token action */
             $this->handleFormSubmit($form->getData(), $request, $response);
         }
+
         return $response;
     }
 

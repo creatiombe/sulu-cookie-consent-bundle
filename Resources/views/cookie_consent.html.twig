@@ -150,13 +150,13 @@
     <div class="cookie-consent__info">
 
         {% if simplified %}
-        <div class="block prose">
+        <div class="block">
             <p>{{ 'cookie_consent.intro'|trans({}, 'SuluCookieConsentBundle') }}</p>
             <p>{{ 'cookie_consent.continue_agreement'|trans({}, 'SuluCookieConsentBundle') }}</p>
             <p><a class="text-xs hover:underline" href="{{ privacy_link }}">{{ 'cookie_consent.read_more_about_our_privacy'|trans({}, 'SuluCookieConsentBundle') }}</a></p>
         </div>
         {% else %}
-        <div class="block prose">
+        <div class="block">
             <p>{{ 'cookie_consent.intro'|trans({}, 'SuluCookieConsentBundle') }}</p>
             <details>
                 <summary class="question mt-2 cursor-pointer select-none w-full outline-none">{{ 'cookie_consent.indicate_cookies'|trans({}, 'SuluCookieConsentBundle') }}</summary>

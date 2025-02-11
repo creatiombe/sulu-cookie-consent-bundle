@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Creatiom\SuluCookieConsentBundle\EventSubscriber;
 
 use FOS\HttpCacheBundle\Http\SymfonyResponseTagger;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -23,10 +24,16 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class TagsSubscriber implements EventSubscriberInterface
 {
+    private ?SymfonyResponseTagger $symfonyResponseTagger = null;
+    
     public function __construct(
-        private SymfonyResponseTagger $symfonyResponseTagger,
         private RequestStack $requestStack,
+        private ContainerInterface $container,
     ) {
+        // Try to retrieve the Symfony response tagger from the container.
+        if($this->container->has(SymfonyResponseTagger::class)) {
+            $this->symfonyResponseTagger = $this->container->get(SymfonyResponseTagger::class);
+        }
     }
 
     public static function getSubscribedEvents()
@@ -42,6 +49,11 @@ class TagsSubscriber implements EventSubscriberInterface
      */
     public function addTags(): void
     {
+        // Check if the Symfony response tagger is available.
+        if (!$this->symfonyResponseTagger) {
+            return;
+        }
+        
         if (($this->requestStack->getMainRequest() && $this->requestStack->getMainRequest()->cookies->has('cookie_consent'))
             || ($this->requestStack->getCurrentRequest() && $this->requestStack->getCurrentRequest()->cookies->has('cookie_consent'))) {
             $this->symfonyResponseTagger->addTags(['cookie-consent']);

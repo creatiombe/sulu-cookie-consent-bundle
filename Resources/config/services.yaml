@@ -32,7 +32,7 @@ services:
 
     Creatiom\SuluCookieConsentBundle\EventSubscriber\TagsSubscriber:
         arguments:
-            $symfonyResponseTagger: '@fos_http_cache.http.symfony_response_tagger'
             $requestStack: '@request_stack'
+            $container: '@service_container'
         tags:
             - { name: kernel.event_subscriber }
